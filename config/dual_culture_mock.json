@@ -1,0 +1,12 @@
+{
+    "plate_diameter_mm": 90,
+    "threshold": 220,
+    "plate_center_x": 300,
+    "plate_center_y": 300,
+    "plate_radius_pixels": 225,
+    "split_x": 300,
+    "left_start_x": 210,
+    "left_start_y": 300,
+    "right_start_x": 390,
+    "right_start_y": 300
+}
