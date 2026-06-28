@@ -12,6 +12,66 @@ from plate_analysis.dual_culture import analyze_dual_culture_image
 from plate_analysis.metadata import parse_plate_metadata
 from plate_analysis.plotting import plot_dual_culture_summary
 from plate_analysis.reporting import create_dual_culture_report
+from plate_analysis.calibration import detect_petri_dish
+
+
+def get_analysis_settings(image_path, config):
+    """
+    Decide plate center, radius, split line, and pixels/mm for one image.
+    Can use fixed mock settings or automatic Petri dish detection.
+    """
+
+    plate_diameter_mm = config["plate_diameter_mm"]
+
+    if config["plate_radius_pixels"] == "auto":
+        dish = detect_petri_dish(image_path)
+
+        if dish is None:
+            return None
+
+        center_x = dish["center_x"]
+        center_y = dish["center_y"]
+        detected_radius = dish["radius_pixels"]
+
+        # Slightly smaller than full dish to avoid detecting the plate border
+        analysis_radius = int(detected_radius * 0.94)
+
+        pixels_per_mm = (detected_radius * 2) / plate_diameter_mm
+
+        split_x = center_x
+
+        left_start = (
+            int(center_x + config["left_start_offset_x"]),
+            int(center_y + config["left_start_offset_y"])
+        )
+
+        right_start = (
+            int(center_x + config["right_start_offset_x"]),
+            int(center_y + config["right_start_offset_y"])
+        )
+
+        return {
+            "pixels_per_mm": pixels_per_mm,
+            "plate_center": (center_x, center_y),
+            "plate_radius": analysis_radius,
+            "split_x": split_x,
+            "left_start": left_start,
+            "right_start": right_start
+        }
+
+    else:
+        plate_radius_pixels = config["plate_radius_pixels"]
+        plate_diameter_pixels = plate_radius_pixels * 2
+        pixels_per_mm = plate_diameter_pixels / plate_diameter_mm
+
+        return {
+            "pixels_per_mm": pixels_per_mm,
+            "plate_center": (config["plate_center_x"], config["plate_center_y"]),
+            "plate_radius": config["plate_radius_pixels"],
+            "split_x": config["split_x"],
+            "left_start": (config["left_start_x"], config["left_start_y"]),
+            "right_start": (config["right_start_x"], config["right_start_y"])
+        }
 
 
 def main():
@@ -43,11 +103,6 @@ def main():
     plot_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.parent.mkdir(parents=True, exist_ok=True)
 
-    plate_diameter_mm = config["plate_diameter_mm"]
-    plate_radius_pixels = config["plate_radius_pixels"]
-    plate_diameter_pixels = plate_radius_pixels * 2
-    pixels_per_mm = plate_diameter_pixels / plate_diameter_mm
-
     image_paths = sorted(
         list(image_dir.glob("*.png")) +
         list(image_dir.glob("*.jpg")) +
@@ -57,15 +112,29 @@ def main():
     results = []
 
     for image_path in image_paths:
+
+        settings = get_analysis_settings(image_path, config)
+
+        if settings is None:
+            result = {
+                "image": image_path.name,
+                "detected": False,
+                "failure_reason": "Petri dish not detected"
+            }
+            metadata = parse_plate_metadata(image_path.name)
+            result.update(metadata)
+            results.append(result)
+            continue
+
         result = analyze_dual_culture_image(
             image_path=image_path,
-            pixels_per_mm=pixels_per_mm,
+            pixels_per_mm=settings["pixels_per_mm"],
             threshold=config["threshold"],
-            plate_center=(config["plate_center_x"], config["plate_center_y"]),
-            plate_radius=config["plate_radius_pixels"],
-            split_x=config["split_x"],
-            left_start=(config["left_start_x"], config["left_start_y"]),
-            right_start=(config["right_start_x"], config["right_start_y"]),
+            plate_center=settings["plate_center"],
+            plate_radius=settings["plate_radius"],
+            split_x=settings["split_x"],
+            left_start=settings["left_start"],
+            right_start=settings["right_start"],
             save_annotated=True,
             annotated_dir=annotated_dir
         )
@@ -73,12 +142,21 @@ def main():
         metadata = parse_plate_metadata(image_path.name)
         result.update(metadata)
 
+        result["pixels_per_mm"] = settings["pixels_per_mm"]
+        result["plate_center_x"] = settings["plate_center"][0]
+        result["plate_center_y"] = settings["plate_center"][1]
+        result["plate_radius_pixels"] = settings["plate_radius"]
+
         results.append(result)
 
     df = pd.DataFrame(results)
     df.to_csv(output_csv, index=False)
 
-    summary_by_day = plot_dual_culture_summary(output_csv, plot_path)
+    if "day" in df.columns and df["day"].notna().any():
+        summary_by_day = plot_dual_culture_summary(output_csv, plot_path)
+    else:
+        summary_by_day = None
+
     create_dual_culture_report(output_csv, report_path)
 
     print("BioVisionLab dual-culture analysis complete")
@@ -91,8 +169,9 @@ def main():
     print(f"Summary plot saved at: {plot_path}")
     print(f"Report saved at: {report_path}")
 
-    print("\nSummary by day:")
-    print(summary_by_day)
+    if summary_by_day is not None:
+        print("\nSummary by day:")
+        print(summary_by_day)
 
 
 if __name__ == "__main__":

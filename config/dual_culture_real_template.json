@@ -1,0 +1,11 @@
+{
+    "plate_diameter_mm": 90,
+    "threshold": 220,
+    "plate_radius_pixels": "auto",
+
+    "left_start_offset_x": -90,
+    "left_start_offset_y": 0,
+
+    "right_start_offset_x": 90,
+    "right_start_offset_y": 0
+}
