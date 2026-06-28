@@ -11,3 +11,7 @@ python scripts/analyze_dual_culture_folder.py \
     --config config/dual_culture_mock.json \
     --plot results/demo_plot.png \
     --report results/demo_report.txt
+
+
+echo "Validating BioVisionLab measurements against mock ground truth..."
+python scripts/validate_mock_demo.py
