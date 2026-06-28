@@ -12,6 +12,7 @@ def parse_plate_metadata(filename):
     - plate_001_day_7.jpg
     - VL243377_LM191A_Westar_plate_001_day_7.jpg
     - DAOMC243377_MB10-191A_45M35_plate_012_day_10.jpg
+    - CO2_MB10-083A_Westar_VLfirst_plate_003_day_5.jpg
 
     Returns a dictionary. Missing fields are returned as None.
     """
@@ -27,17 +28,14 @@ def parse_plate_metadata(filename):
         "treatment": None
     }
 
-    # Plate number
     plate_match = re.search(r"plate[_-]?(\d+)", stem, flags=re.IGNORECASE)
     if plate_match:
         metadata["plate_id"] = int(plate_match.group(1))
 
-    # Day number
     day_match = re.search(r"day[_-]?(\d+)", stem, flags=re.IGNORECASE)
     if day_match:
         metadata["day"] = int(day_match.group(1))
 
-    # Split filename into useful parts
     tokens = re.split(r"[_\s]+", stem)
 
     known_cultivars = {
@@ -66,11 +64,12 @@ def parse_plate_metadata(filename):
 
         if lower in known_cultivars:
             metadata["cultivar"] = known_cultivars[lower]
+            continue
 
         if lower in known_treatments:
             metadata["treatment"] = known_treatments[lower]
+            continue
 
-        # Verticillium longisporum isolate patterns
         if (
             upper.startswith("VL")
             or upper.startswith("DAOMC")
@@ -78,13 +77,14 @@ def parse_plate_metadata(filename):
             or upper in known_vl_tokens
         ):
             metadata["vl_isolate"] = clean
+            continue
 
-        # Leptosphaeria maculans isolate patterns
         if (
             upper.startswith("LM")
             or upper.startswith("MB10")
             or upper.startswith("BLG")
         ):
             metadata["lm_isolate"] = clean
+            continue
 
     return metadata
