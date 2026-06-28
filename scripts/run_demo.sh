@@ -15,3 +15,7 @@ python scripts/analyze_dual_culture_folder.py \
 
 echo "Validating BioVisionLab measurements against mock ground truth..."
 python scripts/validate_mock_demo.py
+
+
+echo "Creating QC contact sheet..."
+python scripts/create_qc_contact_sheet.py     --input results/demo_annotated     --output results/demo_qc_contact_sheet.png     --columns 4     --thumbnail-width 300
