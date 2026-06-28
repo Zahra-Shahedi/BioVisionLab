@@ -53,6 +53,15 @@ From the project folder:
 
 The demo script will generate mock dual-culture images, analyze them, and save a CSV, annotated quality-control images, a summary plot, and a text report.
 
+## Run tests
+
+BioVisionLab includes automated tests for metadata parsing and validation.
+
+From the project folder:
+
+```bash
+python -m unittest discover -s tests -v
+```
 ## Long-term goal
 
 The long-term goal is to expand BioVisionLab into a reusable toolkit for biological image analysis, including fungal plate assays, plant disease images, roots, seeds, and microscopy images.
