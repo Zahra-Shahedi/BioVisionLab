@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "Generating mock dual-culture dataset..."
+python scripts/generate_mock_dual_culture_dataset.py
+
+echo "Running BioVisionLab analysis..."
 python scripts/analyze_dual_culture_folder.py \
     --input data/both_white_dual_culture \
     --output results/demo_results.csv \

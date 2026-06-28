@@ -5,6 +5,3 @@ __pycache__/
 data/
 results/
 *.csv
-*.png
-*.jpg
-*.jpeg
