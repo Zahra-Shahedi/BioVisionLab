@@ -25,6 +25,7 @@ biovisionlab-validate-mock = "plate_analysis.cli:main_validate_mock"
 biovisionlab-preview-config = "plate_analysis.cli:main_preview_config"
 biovisionlab-summarize = "plate_analysis.cli:main_summarize"
 biovisionlab-qc-flags = "plate_analysis.cli:main_qc_flags"
+biovisionlab-compare-manual = "plate_analysis.cli:main_compare_manual"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

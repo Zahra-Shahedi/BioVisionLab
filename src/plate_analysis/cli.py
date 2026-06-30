@@ -8,6 +8,7 @@ from plate_analysis.validation import validate_gap_measurements
 from plate_analysis.preview import create_config_preview
 from plate_analysis.summary import create_experiment_summary
 from plate_analysis.quality_control import add_qc_flags
+from plate_analysis.manual_validation import compare_with_manual_measurements
 
 
 def main_analyze():
@@ -185,3 +186,35 @@ def main_qc_flags():
         print("")
         print("Rows needing check:")
         print(df[df["qc_flag"] == "check"][["image", "qc_reason"]].head(20))
+
+
+def main_compare_manual():
+    parser = argparse.ArgumentParser(
+        description="Compare BioVisionLab automated measurements with manual measurements."
+    )
+
+    parser.add_argument("--input", required=True, help="BioVisionLab results CSV")
+    parser.add_argument("--manual", required=True, help="Manual measurement CSV")
+    parser.add_argument("--output", required=True, help="Output CSV with errors")
+    parser.add_argument("--plot", required=True, help="Output validation plot")
+    parser.add_argument("--report", required=True, help="Output validation report")
+
+    args = parser.parse_args()
+
+    metrics = compare_with_manual_measurements(
+        results_csv=args.input,
+        manual_csv=args.manual,
+        output_csv=args.output,
+        output_plot=args.plot,
+        output_report=args.report
+    )
+
+    print("BioVisionLab manual validation complete")
+    print("--------------------------------------")
+    print(f"Automated results: {args.input}")
+    print(f"Manual measurements: {args.manual}")
+    print(f"Output CSV: {args.output}")
+    print(f"Plot: {args.plot}")
+    print(f"Report: {args.report}")
+    print("")
+    print(metrics)
