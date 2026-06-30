@@ -7,6 +7,7 @@ from plate_analysis.qc import create_contact_sheet
 from plate_analysis.validation import validate_gap_measurements
 from plate_analysis.preview import create_config_preview
 from plate_analysis.summary import create_experiment_summary
+from plate_analysis.quality_control import add_qc_flags
 
 
 def main_analyze():
@@ -149,3 +150,38 @@ def main_summarize():
     print(f"Rows: {len(summary)}")
     print("")
     print(summary.head())
+
+
+def main_qc_flags():
+    parser = argparse.ArgumentParser(
+        description="Add quality-control flags to BioVisionLab results."
+    )
+
+    parser.add_argument("--input", required=True, help="BioVisionLab results CSV")
+    parser.add_argument("--output", required=True, help="Output CSV with QC flags")
+    parser.add_argument("--gap-min-mm", type=float, default=0, help="Minimum acceptable gap in mm")
+    parser.add_argument("--gap-max-mm", type=float, default=None, help="Maximum acceptable gap in mm")
+
+    args = parser.parse_args()
+
+    df = add_qc_flags(
+        results_csv=args.input,
+        output_csv=args.output,
+        gap_min_mm=args.gap_min_mm,
+        gap_max_mm=args.gap_max_mm
+    )
+
+    n_check = (df["qc_flag"] == "check").sum()
+    n_pass = (df["qc_flag"] == "pass").sum()
+
+    print("BioVisionLab QC flags added")
+    print("---------------------------")
+    print(f"Input: {args.input}")
+    print(f"Output: {args.output}")
+    print(f"Passed rows: {n_pass}")
+    print(f"Rows needing check: {n_check}")
+
+    if n_check > 0:
+        print("")
+        print("Rows needing check:")
+        print(df[df["qc_flag"] == "check"][["image", "qc_reason"]].head(20))
