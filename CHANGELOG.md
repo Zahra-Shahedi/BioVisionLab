@@ -2,6 +2,18 @@
 
 All notable changes to BioVisionLab will be documented in this file.
 
+
+## Unreleased
+
+### Added
+
+- Full dual-culture workflow command: `biovisionlab-run-workflow`.
+- Manual measurement validation command.
+- Manual measurement template command.
+- QC flagging command.
+- Experiment plotting command.
+- CLI reference documentation.
+
 ## v0.1.0 - Initial research-tool release
 
 ### Added
