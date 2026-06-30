@@ -1,5 +1,7 @@
 # BioVisionLab
 
+[![BioVisionLab tests](https://github.com/Zahra-Shahedi/BioVisionLab/actions/workflows/tests.yml/badge.svg)](https://github.com/Zahra-Shahedi/BioVisionLab/actions/workflows/tests.yml)
+
 BioVisionLab is a Python-based biological image-analysis toolkit.
 
 The first module focuses on automated measurement of fungal dual-culture Petri dish assays. It was started to address a real research bottleneck: manually measuring fungal growth across hundreds or thousands of plate images.
