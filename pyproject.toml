@@ -18,6 +18,11 @@ dependencies = [
     "matplotlib"
 ]
 
+[project.scripts]
+biovisionlab-analyze = "plate_analysis.cli:main_analyze"
+biovisionlab-contact-sheet = "plate_analysis.cli:main_contact_sheet"
+biovisionlab-validate-mock = "plate_analysis.cli:main_validate_mock"
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 
