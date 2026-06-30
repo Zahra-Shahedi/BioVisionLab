@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use BioVisionLab, please cite it as below."
+title: "BioVisionLab: A Python toolkit for biological image analysis"
+version: "0.1.0"
+date-released: 2026-06-30
+authors:
+  - family-names: "Shahedi"
+    given-names: "Zahra"
+repository-code: "https://github.com/Zahra-Shahedi/BioVisionLab"
+abstract: "BioVisionLab is a Python toolkit for biological image analysis, starting with automated measurement of fungal dual-culture Petri dish assays."
+license: "MIT"

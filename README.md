@@ -98,6 +98,19 @@ python -m unittest discover -s tests -v
 - [Changelog](CHANGELOG.md)
 - [Roadmap](ROADMAP.md)
 
+
+## Citation and license
+
+BioVisionLab is released under the MIT License.
+
+If you use this project, please cite it using the information in:
+
+[CITATION.cff](CITATION.cff)
+
+See the license file here:
+
+[LICENSE](LICENSE)
+
 ## Long-term goal
 
 The long-term goal is to expand BioVisionLab into a reusable toolkit for biological image analysis, including fungal plate assays, plant disease images, roots, seeds, and microscopy images.
