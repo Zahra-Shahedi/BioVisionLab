@@ -6,6 +6,7 @@ from plate_analysis.pipeline import analyze_dual_culture_folder
 from plate_analysis.qc import create_contact_sheet
 from plate_analysis.validation import validate_gap_measurements
 from plate_analysis.preview import create_config_preview
+from plate_analysis.summary import create_experiment_summary
 
 
 def main_analyze():
@@ -117,3 +118,34 @@ def main_preview_config():
     print(f"Split x: {result['split_x']}")
     print(f"Left plug estimate: {result['left_start']}")
     print(f"Right plug estimate: {result['right_start']}")
+
+
+def main_summarize():
+    parser = argparse.ArgumentParser(
+        description="Create grouped summary tables from BioVisionLab results."
+    )
+
+    parser.add_argument("--input", required=True, help="BioVisionLab results CSV")
+    parser.add_argument("--output", required=True, help="Output summary CSV")
+    parser.add_argument(
+        "--group-by",
+        nargs="+",
+        default=None,
+        help="Columns to group by, for example: cultivar treatment day"
+    )
+
+    args = parser.parse_args()
+
+    summary = create_experiment_summary(
+        results_csv=args.input,
+        output_csv=args.output,
+        group_columns=args.group_by
+    )
+
+    print("BioVisionLab experiment summary created")
+    print("--------------------------------------")
+    print(f"Input: {args.input}")
+    print(f"Output: {args.output}")
+    print(f"Rows: {len(summary)}")
+    print("")
+    print(summary.head())

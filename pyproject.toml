@@ -23,6 +23,7 @@ biovisionlab-analyze = "plate_analysis.cli:main_analyze"
 biovisionlab-contact-sheet = "plate_analysis.cli:main_contact_sheet"
 biovisionlab-validate-mock = "plate_analysis.cli:main_validate_mock"
 biovisionlab-preview-config = "plate_analysis.cli:main_preview_config"
+biovisionlab-summarize = "plate_analysis.cli:main_summarize"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
