@@ -5,6 +5,7 @@ import argparse
 from plate_analysis.pipeline import analyze_dual_culture_folder
 from plate_analysis.qc import create_contact_sheet
 from plate_analysis.validation import validate_gap_measurements
+from plate_analysis.preview import create_config_preview
 
 
 def main_analyze():
@@ -89,3 +90,30 @@ def main_validate_mock():
     print(f"Mean absolute error: {metrics['mean_absolute_error_mm']:.3f} mm")
     print(f"RMSE: {metrics['rmse_mm']:.3f} mm")
     print(f"Maximum absolute error: {metrics['max_absolute_error_mm']:.3f} mm")
+
+
+def main_preview_config():
+    parser = argparse.ArgumentParser(
+        description="Preview BioVisionLab plate detection and plug-position settings."
+    )
+
+    parser.add_argument("--image", required=True, help="Input plate image")
+    parser.add_argument("--config", required=True, help="BioVisionLab config JSON file")
+    parser.add_argument("--output", required=True, help="Output preview image")
+
+    args = parser.parse_args()
+
+    result = create_config_preview(
+        image_path=args.image,
+        config_path=args.config,
+        output_path=args.output
+    )
+
+    print("BioVisionLab config preview created")
+    print("-----------------------------------")
+    print(f"Saved at: {result['output_path']}")
+    print(f"Plate center: {result['plate_center']}")
+    print(f"Plate radius: {result['plate_radius']}")
+    print(f"Split x: {result['split_x']}")
+    print(f"Left plug estimate: {result['left_start']}")
+    print(f"Right plug estimate: {result['right_start']}")
