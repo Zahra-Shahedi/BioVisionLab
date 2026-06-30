@@ -145,3 +145,42 @@ def compare_with_manual_measurements(
         file.write("\n".join(lines))
 
     return metrics_df
+
+
+
+def create_manual_measurement_template(
+    results_csv,
+    output_csv,
+    include_detected_only=True
+):
+    """
+    Create a blank manual-measurement template from BioVisionLab results.
+
+    The output CSV can be opened in Excel and filled in by a user.
+    """
+
+    results_csv = Path(results_csv)
+    output_csv = Path(output_csv)
+
+    results = pd.read_csv(results_csv)
+
+    if "image" not in results.columns:
+        raise ValueError("Results CSV must contain an 'image' column.")
+
+    if include_detected_only and "detected" in results.columns:
+        results = results[results["detected"] == True].copy()
+
+    template = pd.DataFrame({
+        "image": results["image"],
+        "manual_gap_mm": "",
+        "manual_left_width_mm": "",
+        "manual_right_width_mm": "",
+        "manual_left_growth_toward_mm": "",
+        "manual_right_growth_toward_mm": "",
+        "notes": ""
+    })
+
+    output_csv.parent.mkdir(parents=True, exist_ok=True)
+    template.to_csv(output_csv, index=False)
+
+    return template

@@ -8,7 +8,7 @@ from plate_analysis.validation import validate_gap_measurements
 from plate_analysis.preview import create_config_preview
 from plate_analysis.summary import create_experiment_summary
 from plate_analysis.quality_control import add_qc_flags
-from plate_analysis.manual_validation import compare_with_manual_measurements
+from plate_analysis.manual_validation import compare_with_manual_measurements, create_manual_measurement_template
 
 
 def main_analyze():
@@ -218,3 +218,31 @@ def main_compare_manual():
     print(f"Report: {args.report}")
     print("")
     print(metrics)
+
+
+def main_manual_template():
+    parser = argparse.ArgumentParser(
+        description="Create a blank manual-measurement template from BioVisionLab results."
+    )
+
+    parser.add_argument("--input", required=True, help="BioVisionLab results CSV")
+    parser.add_argument("--output", required=True, help="Output manual-measurement template CSV")
+    parser.add_argument(
+        "--include-failed",
+        action="store_true",
+        help="Include failed detections in the manual template"
+    )
+
+    args = parser.parse_args()
+
+    template = create_manual_measurement_template(
+        results_csv=args.input,
+        output_csv=args.output,
+        include_detected_only=not args.include_failed
+    )
+
+    print("Manual measurement template created")
+    print("-----------------------------------")
+    print(f"Input: {args.input}")
+    print(f"Output: {args.output}")
+    print(f"Rows: {len(template)}")
