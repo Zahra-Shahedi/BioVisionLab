@@ -11,6 +11,7 @@ from plate_analysis.quality_control import add_qc_flags, copy_qc_review_images
 from plate_analysis.manual_validation import compare_with_manual_measurements, create_manual_measurement_template
 from plate_analysis.experiment_plots import plot_experiment_measurement
 from plate_analysis.workflow import run_dual_culture_workflow
+from plate_analysis.dataset_audit import audit_image_folder
 
 
 def main_analyze():
@@ -376,3 +377,36 @@ def main_qc_review_images():
         print("Missing:")
         for name in summary["missing"][:20]:
             print(f"- {name}")
+
+
+def main_audit_dataset():
+    parser = argparse.ArgumentParser(
+        description="Audit image folder before BioVisionLab analysis."
+    )
+
+    parser.add_argument("--input", required=True, help="Folder containing images")
+    parser.add_argument("--output", required=True, help="Output audit CSV")
+    parser.add_argument("--config", default=None, help="Optional BioVisionLab config JSON file")
+    parser.add_argument("--report", default=None, help="Optional text audit report")
+
+    args = parser.parse_args()
+
+    audit = audit_image_folder(
+        input_folder=args.input,
+        output_csv=args.output,
+        config_path=args.config,
+        output_report=args.report
+    )
+
+    print("BioVisionLab dataset audit complete")
+    print("-----------------------------------")
+    print(f"Images found: {len(audit)}")
+    print(f"Readable images: {int(audit['readable'].sum())}")
+    print(f"Audit CSV: {args.output}")
+
+    if args.report is not None:
+        print(f"Audit report: {args.report}")
+
+    if "config_ok" in audit.columns and audit["config_ok"].notna().any():
+        print(f"Images passing config check: {int((audit['config_ok'] == True).sum())}")
+        print(f"Images failing config check: {int((audit['config_ok'] == False).sum())}")
