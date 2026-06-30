@@ -45,6 +45,33 @@ The dual-culture module currently extracts:
 * gap between colonies
 * detection status for each image
 
+## Command-line tools
+
+After installing BioVisionLab with:
+
+```bash
+pip install -e .
+```
+
+the following command-line tools are available:
+
+```bash
+biovisionlab-analyze
+biovisionlab-contact-sheet
+biovisionlab-validate-mock
+```
+
+Example analysis command:
+
+```bash
+biovisionlab-analyze \
+    --input data/both_white_dual_culture \
+    --output results/demo_results.csv \
+    --annotated results/demo_annotated \
+    --config config/dual_culture_mock.json \
+    --plot results/demo_plot.png \
+    --report results/demo_report.txt
+```
 ## Run demo
 
 From the project folder:
