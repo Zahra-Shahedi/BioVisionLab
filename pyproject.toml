@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "biovisionlab"
+version = "0.1.0"
+description = "Python toolkit for biological image analysis, starting with fungal dual-culture plate measurements."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "Zahra Shahedi" }
+]
+dependencies = [
+    "opencv-python",
+    "numpy",
+    "pandas",
+    "matplotlib"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
