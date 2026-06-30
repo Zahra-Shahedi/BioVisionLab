@@ -9,6 +9,7 @@ from plate_analysis.preview import create_config_preview
 from plate_analysis.summary import create_experiment_summary
 from plate_analysis.quality_control import add_qc_flags
 from plate_analysis.manual_validation import compare_with_manual_measurements, create_manual_measurement_template
+from plate_analysis.experiment_plots import plot_experiment_measurement
 
 
 def main_analyze():
@@ -246,3 +247,41 @@ def main_manual_template():
     print(f"Input: {args.input}")
     print(f"Output: {args.output}")
     print(f"Rows: {len(template)}")
+
+
+def main_plot_experiment():
+    parser = argparse.ArgumentParser(
+        description="Plot BioVisionLab measurements over time."
+    )
+
+    parser.add_argument("--input", required=True, help="BioVisionLab results CSV")
+    parser.add_argument("--output", required=True, help="Output plot image")
+    parser.add_argument(
+        "--measurement",
+        default="gap_mm",
+        help="Measurement column to plot, for example gap_mm or left_width_mm"
+    )
+    parser.add_argument(
+        "--group-by",
+        nargs="+",
+        default=None,
+        help="Optional grouping columns, for example cultivar treatment"
+    )
+
+    args = parser.parse_args()
+
+    summary = plot_experiment_measurement(
+        results_csv=args.input,
+        output_plot=args.output,
+        measurement=args.measurement,
+        group_columns=args.group_by
+    )
+
+    print("BioVisionLab experiment plot created")
+    print("------------------------------------")
+    print(f"Input: {args.input}")
+    print(f"Output: {args.output}")
+    print(f"Measurement: {args.measurement}")
+    print(f"Rows in plot summary: {len(summary)}")
+    print("")
+    print(summary.head())
