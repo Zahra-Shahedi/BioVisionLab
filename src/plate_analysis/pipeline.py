@@ -1,6 +1,7 @@
 
 from pathlib import Path
 import json
+import shutil
 import pandas as pd
 
 from plate_analysis.dual_culture import analyze_dual_culture_image
@@ -66,13 +67,29 @@ def get_analysis_settings(image_path, config):
     }
 
 
+def _copy_failed_image(image_path, failed_dir):
+    """
+    Copy a failed image into the failed-image QC folder.
+    """
+
+    if failed_dir is None:
+        return
+
+    failed_dir = Path(failed_dir)
+    failed_dir.mkdir(parents=True, exist_ok=True)
+
+    destination = failed_dir / Path(image_path).name
+    shutil.copy2(image_path, destination)
+
+
 def analyze_dual_culture_folder(
     input_folder,
     output_csv,
     annotated_folder,
     config_path,
     plot_path,
-    report_path
+    report_path,
+    failed_folder=None
 ):
     """
     Analyze a folder of dual-culture plate images.
@@ -84,6 +101,10 @@ def analyze_dual_culture_folder(
     config_path = Path(config_path)
     plot_path = Path(plot_path)
     report_path = Path(report_path)
+
+    if failed_folder is not None:
+        failed_folder = Path(failed_folder)
+        failed_folder.mkdir(parents=True, exist_ok=True)
 
     with open(config_path, "r") as file:
         config = json.load(file)
@@ -113,6 +134,8 @@ def analyze_dual_culture_folder(
             metadata = parse_plate_metadata(image_path.name)
             result.update(metadata)
             results.append(result)
+
+            _copy_failed_image(image_path, failed_folder)
             continue
 
         result = analyze_dual_culture_image(
@@ -136,6 +159,9 @@ def analyze_dual_culture_folder(
         result["plate_center_y"] = settings["plate_center"][1]
         result["plate_radius_pixels"] = settings["plate_radius"]
 
+        if result.get("detected") is False:
+            _copy_failed_image(image_path, failed_folder)
+
         results.append(result)
 
     df = pd.DataFrame(results)
@@ -143,8 +169,13 @@ def analyze_dual_culture_folder(
 
     summary_by_day = None
 
-    if "day" in df.columns and df["day"].notna().any():
-        summary_by_day = plot_dual_culture_summary(output_csv, plot_path)
+    required_plot_columns = {"day", "left_width_mm", "right_width_mm", "gap_mm"}
+
+    if required_plot_columns.issubset(df.columns):
+        detected_df = df[df["detected"] == True].copy()
+
+        if len(detected_df) > 0 and detected_df["day"].notna().any():
+            summary_by_day = plot_dual_culture_summary(output_csv, plot_path)
 
     create_dual_culture_report(output_csv, report_path)
 
@@ -153,6 +184,7 @@ def analyze_dual_culture_folder(
         "summary_by_day": summary_by_day,
         "output_csv": output_csv,
         "annotated_dir": annotated_dir,
+        "failed_dir": failed_folder,
         "plot_path": plot_path,
         "report_path": report_path,
         "config_path": config_path

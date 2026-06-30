@@ -24,6 +24,7 @@ def main_analyze():
     parser.add_argument("--config", required=True, help="Path to JSON config file")
     parser.add_argument("--plot", required=True, help="Path to save summary plot")
     parser.add_argument("--report", required=True, help="Path to save text report")
+    parser.add_argument("--failed", default=None, help="Folder to save failed input images")
 
     args = parser.parse_args()
 
@@ -33,7 +34,8 @@ def main_analyze():
         annotated_folder=args.annotated,
         config_path=args.config,
         plot_path=args.plot,
-        report_path=args.report
+        report_path=args.report,
+        failed_folder=args.failed
     )
 
     df = result["dataframe"]
@@ -47,6 +49,8 @@ def main_analyze():
     print(f"Annotated images saved at: {result['annotated_dir']}")
     print(f"Summary plot saved at: {result['plot_path']}")
     print(f"Report saved at: {result['report_path']}")
+    if result.get("failed_dir") is not None:
+        print(f"Failed images saved at: {result['failed_dir']}")
 
     if result["summary_by_day"] is not None:
         print("\nSummary by day:")

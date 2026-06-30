@@ -39,6 +39,7 @@ def run_dual_culture_workflow(
     annotated_dir = output_dir / f"{prefix}_annotated"
     basic_plot = output_dir / f"{prefix}_basic_plot.png"
     report = output_dir / f"{prefix}_report.txt"
+    failed_dir = output_dir / f"{prefix}_failed_images"
 
     qc_csv = output_dir / f"{prefix}_qc_flags.csv"
     contact_sheet = output_dir / f"{prefix}_contact_sheet.png"
@@ -50,6 +51,7 @@ def run_dual_culture_workflow(
         "annotated_dir": annotated_dir,
         "basic_plot": basic_plot,
         "report": report,
+        "failed_dir": failed_dir,
         "qc_csv": qc_csv,
         "contact_sheet": contact_sheet,
         "experiment_summary": experiment_summary,
@@ -62,7 +64,8 @@ def run_dual_culture_workflow(
         annotated_folder=annotated_dir,
         config_path=config_path,
         plot_path=basic_plot,
-        report_path=report
+        report_path=report,
+        failed_folder=failed_dir
     )
 
     outputs["n_images"] = len(analysis_result["dataframe"])
