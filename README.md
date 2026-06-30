@@ -91,6 +91,13 @@ From the project folder:
 ```bash
 python -m unittest discover -s tests -v
 ```
+
+## Project documentation
+
+- [Real-image protocol](docs/real_image_protocol.md)
+- [Changelog](CHANGELOG.md)
+- [Roadmap](ROADMAP.md)
+
 ## Long-term goal
 
 The long-term goal is to expand BioVisionLab into a reusable toolkit for biological image analysis, including fungal plate assays, plant disease images, roots, seeds, and microscopy images.
