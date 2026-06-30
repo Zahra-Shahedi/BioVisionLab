@@ -7,7 +7,7 @@ from plate_analysis.qc import create_contact_sheet
 from plate_analysis.validation import validate_gap_measurements
 from plate_analysis.preview import create_config_preview
 from plate_analysis.summary import create_experiment_summary
-from plate_analysis.quality_control import add_qc_flags
+from plate_analysis.quality_control import add_qc_flags, copy_qc_review_images
 from plate_analysis.manual_validation import compare_with_manual_measurements, create_manual_measurement_template
 from plate_analysis.experiment_plots import plot_experiment_measurement
 from plate_analysis.workflow import run_dual_culture_workflow
@@ -345,3 +345,34 @@ def main_run_workflow():
         print(f"Experiment plot: {outputs['experiment_plot']}")
     else:
         print(f"Experiment plot skipped: {outputs.get('experiment_plot_error')}")
+
+
+def main_qc_review_images():
+    parser = argparse.ArgumentParser(
+        description="Copy QC-flagged annotated images into a review folder."
+    )
+
+    parser.add_argument("--qc-csv", required=True, help="CSV containing qc_flag column")
+    parser.add_argument("--annotated", required=True, help="Folder containing annotated images")
+    parser.add_argument("--output", required=True, help="Folder to copy flagged images into")
+
+    args = parser.parse_args()
+
+    summary = copy_qc_review_images(
+        qc_csv=args.qc_csv,
+        annotated_folder=args.annotated,
+        output_folder=args.output
+    )
+
+    print("BioVisionLab QC review images copied")
+    print("------------------------------------")
+    print(f"Flagged rows: {summary['n_flagged']}")
+    print(f"Images copied: {summary['n_copied']}")
+    print(f"Missing annotated images: {summary['n_missing']}")
+    print(f"Output folder: {args.output}")
+
+    if summary["n_missing"] > 0:
+        print("")
+        print("Missing:")
+        for name in summary["missing"][:20]:
+            print(f"- {name}")

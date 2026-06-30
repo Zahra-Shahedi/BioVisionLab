@@ -72,3 +72,64 @@ def add_qc_flags(
     df.to_csv(output_csv, index=False)
 
     return df
+
+
+
+def copy_qc_review_images(
+    qc_csv,
+    annotated_folder,
+    output_folder,
+    image_column="image"
+):
+    """
+    Copy annotated images that have qc_flag == 'check' into a review folder.
+
+    This helps users quickly inspect suspicious results.
+    """
+
+    import shutil
+
+    qc_csv = Path(qc_csv)
+    annotated_folder = Path(annotated_folder)
+    output_folder = Path(output_folder)
+
+    df = pd.read_csv(qc_csv)
+
+    if "qc_flag" not in df.columns:
+        raise ValueError("QC CSV must contain a 'qc_flag' column.")
+
+    if image_column not in df.columns:
+        raise ValueError(f"QC CSV must contain an '{image_column}' column.")
+
+    output_folder.mkdir(parents=True, exist_ok=True)
+
+    check_df = df[df["qc_flag"] == "check"].copy()
+
+    copied = []
+    missing = []
+
+    for _, row in check_df.iterrows():
+        original_name = row[image_column]
+        stem = Path(original_name).stem
+
+        possible_matches = list(annotated_folder.glob(f"{stem}*"))
+
+        if len(possible_matches) == 0:
+            missing.append(original_name)
+            continue
+
+        source = possible_matches[0]
+        destination = output_folder / source.name
+
+        shutil.copy2(source, destination)
+        copied.append(destination.name)
+
+    summary = {
+        "n_flagged": len(check_df),
+        "n_copied": len(copied),
+        "n_missing": len(missing),
+        "copied": copied,
+        "missing": missing
+    }
+
+    return summary

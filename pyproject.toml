@@ -29,6 +29,7 @@ biovisionlab-compare-manual = "plate_analysis.cli:main_compare_manual"
 biovisionlab-manual-template = "plate_analysis.cli:main_manual_template"
 biovisionlab-plot-experiment = "plate_analysis.cli:main_plot_experiment"
 biovisionlab-run-workflow = "plate_analysis.cli:main_run_workflow"
+biovisionlab-qc-review-images = "plate_analysis.cli:main_qc_review_images"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
