@@ -56,9 +56,18 @@ pip install -e .
 the following command-line tools are available:
 
 ```bash
+biovisionlab-run-workflow
 biovisionlab-analyze
 biovisionlab-contact-sheet
 biovisionlab-validate-mock
+biovisionlab-preview-config
+biovisionlab-summarize
+biovisionlab-qc-flags
+biovisionlab-qc-review-images
+biovisionlab-audit-dataset
+biovisionlab-manual-template
+biovisionlab-compare-manual
+biovisionlab-plot-experiment
 ```
 
 Example analysis command:

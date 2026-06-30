@@ -14,6 +14,24 @@ All notable changes to BioVisionLab will be documented in this file.
 - Experiment plotting command.
 - CLI reference documentation.
 
+
+## v0.2.0 - Workflow, QC, and validation expansion
+
+### Added
+
+- One-command full dual-culture workflow: `biovisionlab-run-workflow`.
+- Dataset audit / preflight command: `biovisionlab-audit-dataset`.
+- QC flagging command: `biovisionlab-qc-flags`.
+- QC review-image export command: `biovisionlab-qc-review-images`.
+- Failed-image QC folder support.
+- Manual measurement template command.
+- Manual-vs-automated validation command.
+- Experiment plotting command.
+- Experiment summary command.
+- Config preview command.
+- CLI reference documentation.
+- Additional automated tests for workflow, QC, plotting, manual validation, failed images, and dataset audit.
+
 ## v0.1.0 - Initial research-tool release
 
 ### Added
