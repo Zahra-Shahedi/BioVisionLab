@@ -10,6 +10,7 @@ from plate_analysis.summary import create_experiment_summary
 from plate_analysis.quality_control import add_qc_flags
 from plate_analysis.manual_validation import compare_with_manual_measurements, create_manual_measurement_template
 from plate_analysis.experiment_plots import plot_experiment_measurement
+from plate_analysis.workflow import run_dual_culture_workflow
 
 
 def main_analyze():
@@ -285,3 +286,58 @@ def main_plot_experiment():
     print(f"Rows in plot summary: {len(summary)}")
     print("")
     print(summary.head())
+
+
+def main_run_workflow():
+    parser = argparse.ArgumentParser(
+        description="Run the full BioVisionLab dual-culture workflow."
+    )
+
+    parser.add_argument("--input", required=True, help="Folder containing plate images")
+    parser.add_argument("--output-dir", required=True, help="Folder to save all workflow outputs")
+    parser.add_argument("--config", required=True, help="BioVisionLab config JSON file")
+    parser.add_argument("--prefix", default="analysis", help="Prefix for output files")
+    parser.add_argument("--gap-min-mm", type=float, default=0, help="Minimum acceptable gap in mm")
+    parser.add_argument("--gap-max-mm", type=float, default=None, help="Maximum acceptable gap in mm")
+    parser.add_argument("--plot-measurement", default="gap_mm", help="Measurement to plot")
+    parser.add_argument(
+        "--group-by",
+        nargs="+",
+        default=None,
+        help="Optional grouping columns, for example cultivar treatment day"
+    )
+
+    args = parser.parse_args()
+
+    outputs = run_dual_culture_workflow(
+        input_folder=args.input,
+        output_dir=args.output_dir,
+        config_path=args.config,
+        prefix=args.prefix,
+        gap_min_mm=args.gap_min_mm,
+        gap_max_mm=args.gap_max_mm,
+        plot_measurement=args.plot_measurement,
+        group_columns=args.group_by
+    )
+
+    print("BioVisionLab full workflow complete")
+    print("-----------------------------------")
+    print(f"Images analyzed: {outputs['n_images']}")
+    print(f"Detected successfully: {outputs['n_detected']}")
+    print("")
+    print("Outputs:")
+    print(f"Results CSV: {outputs['results_csv']}")
+    print(f"Annotated images: {outputs['annotated_dir']}")
+    print(f"Report: {outputs['report']}")
+    print(f"QC CSV: {outputs['qc_csv']}")
+    print(f"Contact sheet: {outputs['contact_sheet']}")
+
+    if outputs.get("experiment_summary_created"):
+        print(f"Experiment summary: {outputs['experiment_summary']}")
+    else:
+        print(f"Experiment summary skipped: {outputs.get('experiment_summary_error')}")
+
+    if outputs.get("experiment_plot_created"):
+        print(f"Experiment plot: {outputs['experiment_plot']}")
+    else:
+        print(f"Experiment plot skipped: {outputs.get('experiment_plot_error')}")
