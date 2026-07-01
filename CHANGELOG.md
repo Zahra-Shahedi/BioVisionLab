@@ -8,6 +8,7 @@ All notable changes to BioVisionLab will be documented in this file.
 ### Added
 
 - Threshold method options for colony segmentation: global, Otsu, and adaptive.
+- Mask cleanup options for noisy images: opening, closing, and minimum colony area.
 
 ### Added
 
