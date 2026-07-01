@@ -10,7 +10,9 @@ def _make_fungus_mask(
     threshold=220,
     threshold_method="global",
     adaptive_block_size=51,
-    adaptive_c=2
+    adaptive_c=2,
+    open_kernel_size=0,
+    close_kernel_size=0
 ):
     """
     Create fungal colony mask from grayscale image.
@@ -19,6 +21,10 @@ def _make_fungus_mask(
     - global: gray > threshold
     - otsu: automatic global threshold
     - adaptive: local thresholding for uneven lighting
+
+    Optional morphology:
+    - opening removes small bright noise
+    - closing fills small holes inside colonies
     """
 
     threshold_method = str(threshold_method).lower()
@@ -64,13 +70,22 @@ def _make_fungus_mask(
         )
 
     fungus_mask = fungus_mask & (plate_mask > 0)
+    fungus_mask = fungus_mask.astype(np.uint8) * 255
 
-    return fungus_mask.astype(np.uint8) * 255
+    if open_kernel_size and open_kernel_size > 0:
+        kernel = np.ones((open_kernel_size, open_kernel_size), dtype=np.uint8)
+        fungus_mask = cv2.morphologyEx(fungus_mask, cv2.MORPH_OPEN, kernel)
+
+    if close_kernel_size and close_kernel_size > 0:
+        kernel = np.ones((close_kernel_size, close_kernel_size), dtype=np.uint8)
+        fungus_mask = cv2.morphologyEx(fungus_mask, cv2.MORPH_CLOSE, kernel)
+
+    return fungus_mask
 
 
-def _largest_contour(binary_mask):
+def _largest_contour(binary_mask, min_area_px=50):
     """
-    Return largest contour from a binary mask.
+    Return largest contour from a binary mask after removing very small objects.
     """
 
     contours, _ = cv2.findContours(
@@ -78,6 +93,11 @@ def _largest_contour(binary_mask):
         cv2.RETR_EXTERNAL,
         cv2.CHAIN_APPROX_SIMPLE
     )
+
+    contours = [
+        contour for contour in contours
+        if cv2.contourArea(contour) >= min_area_px
+    ]
 
     if len(contours) == 0:
         return None
@@ -98,7 +118,10 @@ def analyze_dual_culture_image(
     annotated_dir=None,
     threshold_method="global",
     adaptive_block_size=51,
-    adaptive_c=2
+    adaptive_c=2,
+    open_kernel_size=0,
+    close_kernel_size=0,
+    min_colony_area_px=50
 ):
     """
     Analyze one dual-culture Petri dish image.
@@ -138,7 +161,9 @@ def analyze_dual_culture_image(
         threshold=threshold,
         threshold_method=threshold_method,
         adaptive_block_size=adaptive_block_size,
-        adaptive_c=adaptive_c
+        adaptive_c=adaptive_c,
+        open_kernel_size=open_kernel_size,
+        close_kernel_size=close_kernel_size
     )
 
     left_region = np.zeros(gray.shape, dtype=np.uint8)
@@ -150,8 +175,8 @@ def analyze_dual_culture_image(
     left_mask = cv2.bitwise_and(fungus_mask, left_region)
     right_mask = cv2.bitwise_and(fungus_mask, right_region)
 
-    left_contour = _largest_contour(left_mask)
-    right_contour = _largest_contour(right_mask)
+    left_contour = _largest_contour(left_mask, min_area_px=min_colony_area_px)
+    right_contour = _largest_contour(right_mask, min_area_px=min_colony_area_px)
 
     if left_contour is None or right_contour is None:
         return {
@@ -177,6 +202,9 @@ def analyze_dual_culture_image(
         "detected": True,
         "failure_reason": "",
         "threshold_method": threshold_method,
+        "open_kernel_size": open_kernel_size,
+        "close_kernel_size": close_kernel_size,
+        "min_colony_area_px": min_colony_area_px,
         "left_width_mm": left_w / pixels_per_mm,
         "left_height_mm": left_h / pixels_per_mm,
         "right_width_mm": right_w / pixels_per_mm,

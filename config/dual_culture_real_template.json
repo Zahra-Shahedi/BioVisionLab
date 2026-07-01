@@ -4,6 +4,11 @@
     "threshold_method": "global",
     "adaptive_block_size": 51,
     "adaptive_c": 2,
+
+    "open_kernel_size": 0,
+    "close_kernel_size": 0,
+    "min_colony_area_px": 50,
+
     "plate_radius_pixels": "auto",
 
     "left_start_offset_x": -90,

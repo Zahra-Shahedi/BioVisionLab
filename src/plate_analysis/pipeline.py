@@ -131,11 +131,13 @@ def analyze_dual_culture_folder(
                 "detected": False,
                 "failure_reason": "Petri dish not detected"
             }
+
             metadata = parse_plate_metadata(image_path.name)
             result.update(metadata)
-            results.append(result)
 
+            results.append(result)
             _copy_failed_image(image_path, failed_folder)
+
             continue
 
         result = analyze_dual_culture_image(
@@ -151,7 +153,10 @@ def analyze_dual_culture_folder(
             annotated_dir=annotated_dir,
             threshold_method=config.get("threshold_method", "global"),
             adaptive_block_size=config.get("adaptive_block_size", 51),
-            adaptive_c=config.get("adaptive_c", 2)
+            adaptive_c=config.get("adaptive_c", 2),
+            open_kernel_size=config.get("open_kernel_size", 0),
+            close_kernel_size=config.get("close_kernel_size", 0),
+            min_colony_area_px=config.get("min_colony_area_px", 50)
         )
 
         metadata = parse_plate_metadata(image_path.name)
