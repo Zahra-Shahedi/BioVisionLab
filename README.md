@@ -69,6 +69,7 @@ biovisionlab-init-experiment
 biovisionlab-generate-demo
 biovisionlab-compare-thresholds
 biovisionlab-preview-mask
+biovisionlab-validate-config
 biovisionlab-manual-template
 biovisionlab-compare-manual
 biovisionlab-plot-experiment

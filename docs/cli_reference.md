@@ -86,3 +86,24 @@ This saves:
 - mask overlay on the original image
 
 This is useful for debugging threshold and mask-cleanup settings before running full analysis.
+
+## 15. Validate config file
+
+Checks whether a BioVisionLab config JSON file is complete and sensible before analysis.
+
+```bash
+biovisionlab-validate-config \
+    --config config/dual_culture_real_template.json \
+    --report results/config_validation_report.txt
+```
+
+This checks:
+
+- required config keys
+- threshold method names
+- threshold range
+- plate size settings
+- automatic vs fixed plate settings
+- mask-cleanup settings
+
+Use this before running real-image analysis.
