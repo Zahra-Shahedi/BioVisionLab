@@ -67,6 +67,7 @@ biovisionlab-qc-review-images
 biovisionlab-audit-dataset
 biovisionlab-init-experiment
 biovisionlab-generate-demo
+biovisionlab-compare-thresholds
 biovisionlab-manual-template
 biovisionlab-compare-manual
 biovisionlab-plot-experiment

@@ -38,3 +38,32 @@ This is useful for:
 - testing BioVisionLab
 - demonstrating the workflow
 - validating automated measurements against known ground truth
+
+## 13. Compare threshold methods
+
+Compares threshold methods on one image and saves annotated outputs for each method.
+
+```bash
+biovisionlab-compare-thresholds \
+    --image data/both_white_dual_culture/dual_white_plate_001_day_10.png \
+    --config config/dual_culture_mock.json \
+    --output-dir results/threshold_comparison
+```
+
+By default, this compares:
+
+- global threshold
+- Otsu threshold
+- adaptive threshold
+
+You can also choose specific methods:
+
+```bash
+biovisionlab-compare-thresholds \
+    --image data/raw_images/example_plate.jpg \
+    --config config/dual_culture_config.json \
+    --output-dir results/threshold_comparison \
+    --methods global otsu
+```
+
+This is useful before batch analysis because it helps choose the best segmentation method for real plate images.

@@ -100,3 +100,21 @@ For real images, tune settings in this order:
 4. Add `close_kernel_size` if colony masks have holes.
 5. Increase `min_colony_area_px` if small false colonies are detected.
 6. Check annotated images and QC contact sheet.
+
+## Comparing threshold methods on one image
+
+BioVisionLab includes a command for comparing threshold methods before running a full dataset.
+
+```bash
+biovisionlab-compare-thresholds \
+    --image data/raw_images/example_plate.jpg \
+    --config config/dual_culture_config.json \
+    --output-dir results/threshold_comparison
+```
+
+The command saves:
+
+- annotated output for each threshold method
+- a CSV comparing detection status and measurements
+
+This is recommended when setting up a new real-image experiment.
