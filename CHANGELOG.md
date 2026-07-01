@@ -15,6 +15,18 @@ All notable changes to BioVisionLab will be documented in this file.
 - CLI reference documentation.
 
 
+
+## v0.3.0 - Experiment setup and demo workflow improvements
+
+### Added
+
+- Experiment folder initialization command: `biovisionlab-init-experiment`.
+- Demo dataset generation command: `biovisionlab-generate-demo`.
+- Cleaner demo workflow using installed command-line tools.
+- Experiment starter README generated automatically for new projects.
+- Documentation for experiment initialization and demo data generation.
+- Additional automated tests for experiment setup and synthetic demo data generation.
+
 ## v0.2.0 - Workflow, QC, and validation expansion
 
 ### Added
