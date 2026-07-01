@@ -65,6 +65,7 @@ biovisionlab-summarize
 biovisionlab-qc-flags
 biovisionlab-qc-review-images
 biovisionlab-audit-dataset
+biovisionlab-init-experiment
 biovisionlab-manual-template
 biovisionlab-compare-manual
 biovisionlab-plot-experiment
