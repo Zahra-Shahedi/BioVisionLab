@@ -1,6 +1,9 @@
 {
     "plate_diameter_mm": 90,
     "threshold": 220,
+    "threshold_method": "global",
+    "adaptive_block_size": 51,
+    "adaptive_c": 2,
     "plate_radius_pixels": "auto",
 
     "left_start_offset_x": -90,

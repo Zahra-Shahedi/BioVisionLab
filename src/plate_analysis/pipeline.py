@@ -148,7 +148,10 @@ def analyze_dual_culture_folder(
             left_start=settings["left_start"],
             right_start=settings["right_start"],
             save_annotated=True,
-            annotated_dir=annotated_dir
+            annotated_dir=annotated_dir,
+            threshold_method=config.get("threshold_method", "global"),
+            adaptive_block_size=config.get("adaptive_block_size", 51),
+            adaptive_c=config.get("adaptive_c", 2)
         )
 
         metadata = parse_plate_metadata(image_path.name)
