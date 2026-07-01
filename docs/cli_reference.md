@@ -67,3 +67,22 @@ biovisionlab-compare-thresholds \
 ```
 
 This is useful before batch analysis because it helps choose the best segmentation method for real plate images.
+
+## 14. Preview fungus mask
+
+Creates mask-preview outputs for one image so users can see what BioVisionLab detects as fungus.
+
+```bash
+biovisionlab-preview-mask \
+    --image data/both_white_dual_culture/dual_white_plate_001_day_10.png \
+    --config config/dual_culture_mock.json \
+    --output-dir results/mask_preview
+```
+
+This saves:
+
+- grayscale image
+- binary fungus mask
+- mask overlay on the original image
+
+This is useful for debugging threshold and mask-cleanup settings before running full analysis.

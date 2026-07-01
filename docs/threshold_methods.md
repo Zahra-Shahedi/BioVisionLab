@@ -118,3 +118,28 @@ The command saves:
 - a CSV comparing detection status and measurements
 
 This is recommended when setting up a new real-image experiment.
+
+## Previewing the fungus mask
+
+BioVisionLab includes a mask-preview command that shows what pixels are being treated as fungus.
+
+```bash
+biovisionlab-preview-mask \
+    --image data/raw_images/example_plate.jpg \
+    --config config/dual_culture_config.json \
+    --output-dir results/mask_preview
+```
+
+The command saves:
+
+- a grayscale version of the image
+- a binary fungus mask
+- an overlay showing the fungus mask on the original image
+
+Use this when tuning:
+
+- `threshold_method`
+- `threshold`
+- `open_kernel_size`
+- `close_kernel_size`
+- `min_colony_area_px`

@@ -9,6 +9,7 @@ All notable changes to BioVisionLab will be documented in this file.
 
 - Threshold method options for colony segmentation: global, Otsu, and adaptive.
 - Threshold comparison command: `biovisionlab-compare-thresholds`.
+- Mask preview command: `biovisionlab-preview-mask`.
 - Mask cleanup options for noisy images: opening, closing, and minimum colony area.
 
 ### Added
