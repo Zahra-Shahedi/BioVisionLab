@@ -38,6 +38,8 @@ biovisionlab-compare-thresholds = "plate_analysis.cli:main_compare_thresholds"
 
 biovisionlab-preview-mask = "plate_analysis.cli:main_preview_mask"
 
+biovisionlab-validate-config = "plate_analysis.cli:main_validate_config"
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 

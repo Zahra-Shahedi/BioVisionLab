@@ -16,6 +16,7 @@ from plate_analysis.experiment_setup import initialize_experiment_folder
 from plate_analysis.synthetic_data import generate_mock_dual_culture_dataset
 from plate_analysis.threshold_compare import compare_threshold_methods
 from plate_analysis.mask_preview import create_mask_preview
+from plate_analysis.config_validation import validate_config
 
 
 def main_analyze():
@@ -530,3 +531,40 @@ def main_preview_mask():
     print(f"Gray image: {result['gray_path']}")
     print(f"Fungus mask: {result['mask_path']}")
     print(f"Overlay: {result['overlay_path']}")
+
+
+def main_validate_config():
+    parser = argparse.ArgumentParser(
+        description="Validate a BioVisionLab config JSON file."
+    )
+
+    parser.add_argument("--config", required=True, help="BioVisionLab config JSON file")
+    parser.add_argument("--report", default=None, help="Optional output validation report")
+
+    args = parser.parse_args()
+
+    result = validate_config(
+        config_path=args.config,
+        output_report=args.report
+    )
+
+    print("BioVisionLab config validation complete")
+    print("--------------------------------------")
+    print(f"Config: {result['config_path']}")
+    print(f"Valid: {result['is_valid']}")
+
+    if result["errors"]:
+        print("")
+        print("Errors:")
+        for error in result["errors"]:
+            print(f"- {error}")
+
+    if result["warnings"]:
+        print("")
+        print("Warnings:")
+        for warning in result["warnings"]:
+            print(f"- {warning}")
+
+    if args.report is not None:
+        print("")
+        print(f"Report saved at: {args.report}")
