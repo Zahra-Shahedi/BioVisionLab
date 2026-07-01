@@ -22,6 +22,7 @@ All notable changes to BioVisionLab will be documented in this file.
 - One-command full dual-culture workflow: `biovisionlab-run-workflow`.
 - Dataset audit / preflight command: `biovisionlab-audit-dataset`.
 - Experiment folder initialization command: `biovisionlab-init-experiment`.
+- Demo dataset generation command: `biovisionlab-generate-demo`.
 - QC flagging command: `biovisionlab-qc-flags`.
 - QC review-image export command: `biovisionlab-qc-review-images`.
 - Failed-image QC folder support.
