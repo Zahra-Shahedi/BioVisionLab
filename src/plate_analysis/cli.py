@@ -13,6 +13,7 @@ from plate_analysis.experiment_plots import plot_experiment_measurement
 from plate_analysis.workflow import run_dual_culture_workflow
 from plate_analysis.dataset_audit import audit_image_folder
 from plate_analysis.experiment_setup import initialize_experiment_folder
+from plate_analysis.synthetic_data import generate_mock_dual_culture_dataset
 
 
 def main_analyze():
@@ -441,3 +442,29 @@ def main_init_experiment():
     print(f"Results folder: {result['results_dir']}")
     print(f"Config file: {result['config_path']}")
     print(f"Experiment README: {result['readme_path']}")
+
+
+def main_generate_demo():
+    parser = argparse.ArgumentParser(
+        description="Generate a mock dual-culture image dataset for BioVisionLab demos."
+    )
+
+    parser.add_argument("--image-dir", required=True, help="Folder to save generated mock images")
+    parser.add_argument("--ground-truth", required=True, help="Path to save ground-truth CSV")
+    parser.add_argument("--n-plates", type=int, default=10, help="Number of mock plates")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed")
+
+    args = parser.parse_args()
+
+    result = generate_mock_dual_culture_dataset(
+        image_dir=args.image_dir,
+        ground_truth_csv=args.ground_truth,
+        n_plates=args.n_plates,
+        seed=args.seed
+    )
+
+    print("BioVisionLab mock dataset generated")
+    print("-----------------------------------")
+    print(f"Images saved at: {result['image_dir']}")
+    print(f"Ground truth saved at: {result['ground_truth_csv']}")
+    print(f"Images created: {result['n_images']}")

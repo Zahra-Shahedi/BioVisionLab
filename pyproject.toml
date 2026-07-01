@@ -32,6 +32,7 @@ biovisionlab-run-workflow = "plate_analysis.cli:main_run_workflow"
 biovisionlab-qc-review-images = "plate_analysis.cli:main_qc_review_images"
 biovisionlab-audit-dataset = "plate_analysis.cli:main_audit_dataset"
 biovisionlab-init-experiment = "plate_analysis.cli:main_init_experiment"
+biovisionlab-generate-demo = "plate_analysis.cli:main_generate_demo"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
