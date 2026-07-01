@@ -12,6 +12,7 @@ from plate_analysis.manual_validation import compare_with_manual_measurements, c
 from plate_analysis.experiment_plots import plot_experiment_measurement
 from plate_analysis.workflow import run_dual_culture_workflow
 from plate_analysis.dataset_audit import audit_image_folder
+from plate_analysis.experiment_setup import initialize_experiment_folder
 
 
 def main_analyze():
@@ -410,3 +411,33 @@ def main_audit_dataset():
     if "config_ok" in audit.columns and audit["config_ok"].notna().any():
         print(f"Images passing config check: {int((audit['config_ok'] == True).sum())}")
         print(f"Images failing config check: {int((audit['config_ok'] == False).sum())}")
+
+
+def main_init_experiment():
+    parser = argparse.ArgumentParser(
+        description="Create a starter folder structure for a new BioVisionLab experiment."
+    )
+
+    parser.add_argument("--output-dir", required=True, help="Experiment folder to create")
+    parser.add_argument("--plate-diameter-mm", type=float, default=90, help="Petri dish diameter in mm")
+    parser.add_argument("--threshold", type=int, default=220, help="Fungal colony threshold")
+    parser.add_argument("--left-start-offset-x", type=int, default=-90, help="Left plug x offset from plate center")
+    parser.add_argument("--right-start-offset-x", type=int, default=90, help="Right plug x offset from plate center")
+
+    args = parser.parse_args()
+
+    result = initialize_experiment_folder(
+        output_dir=args.output_dir,
+        plate_diameter_mm=args.plate_diameter_mm,
+        threshold=args.threshold,
+        left_start_offset_x=args.left_start_offset_x,
+        right_start_offset_x=args.right_start_offset_x
+    )
+
+    print("BioVisionLab experiment folder created")
+    print("--------------------------------------")
+    print(f"Experiment folder: {result['output_dir']}")
+    print(f"Raw image folder: {result['data_dir']}")
+    print(f"Results folder: {result['results_dir']}")
+    print(f"Config file: {result['config_path']}")
+    print(f"Experiment README: {result['readme_path']}")
