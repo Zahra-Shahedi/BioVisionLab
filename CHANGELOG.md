@@ -7,6 +7,10 @@ All notable changes to BioVisionLab will be documented in this file.
 
 ### Added
 
+- Threshold method options for colony segmentation: global, Otsu, and adaptive.
+
+### Added
+
 - Full dual-culture workflow command: `biovisionlab-run-workflow`.
 - Manual measurement validation command.
 - Manual measurement template command.
