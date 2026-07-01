@@ -34,6 +34,10 @@ biovisionlab-audit-dataset = "plate_analysis.cli:main_audit_dataset"
 biovisionlab-init-experiment = "plate_analysis.cli:main_init_experiment"
 biovisionlab-generate-demo = "plate_analysis.cli:main_generate_demo"
 
+biovisionlab-compare-thresholds = "plate_analysis.cli:main_compare_thresholds"
+
+biovisionlab-preview-mask = "plate_analysis.cli:main_preview_mask"
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 

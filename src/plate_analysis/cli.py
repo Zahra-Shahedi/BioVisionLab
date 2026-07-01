@@ -14,6 +14,8 @@ from plate_analysis.workflow import run_dual_culture_workflow
 from plate_analysis.dataset_audit import audit_image_folder
 from plate_analysis.experiment_setup import initialize_experiment_folder
 from plate_analysis.synthetic_data import generate_mock_dual_culture_dataset
+from plate_analysis.threshold_compare import compare_threshold_methods
+from plate_analysis.mask_preview import create_mask_preview
 
 
 def main_analyze():
@@ -468,3 +470,63 @@ def main_generate_demo():
     print(f"Images saved at: {result['image_dir']}")
     print(f"Ground truth saved at: {result['ground_truth_csv']}")
     print(f"Images created: {result['n_images']}")
+
+
+def main_compare_thresholds():
+    parser = argparse.ArgumentParser(
+        description="Compare BioVisionLab threshold methods on one image."
+    )
+
+    parser.add_argument("--image", required=True, help="Input plate image")
+    parser.add_argument("--config", required=True, help="BioVisionLab config JSON file")
+    parser.add_argument("--output-dir", required=True, help="Folder to save comparison outputs")
+    parser.add_argument(
+        "--methods",
+        nargs="+",
+        default=["global", "otsu", "adaptive"],
+        help="Threshold methods to compare"
+    )
+
+    args = parser.parse_args()
+
+    result = compare_threshold_methods(
+        image_path=args.image,
+        config_path=args.config,
+        output_dir=args.output_dir,
+        methods=args.methods
+    )
+
+    print("BioVisionLab threshold comparison complete")
+    print("-----------------------------------------")
+    print(f"Image: {args.image}")
+    print(f"Config: {args.config}")
+    print(f"Output folder: {result['output_dir']}")
+    print(f"Comparison CSV: {result['comparison_csv']}")
+    print("")
+    print(result["dataframe"][["method_tested", "detected", "gap_mm", "failure_reason"]])
+
+
+def main_preview_mask():
+    parser = argparse.ArgumentParser(
+        description="Create a BioVisionLab fungus-mask preview for one image."
+    )
+
+    parser.add_argument("--image", required=True, help="Input plate image")
+    parser.add_argument("--config", required=True, help="BioVisionLab config JSON file")
+    parser.add_argument("--output-dir", required=True, help="Folder to save mask preview outputs")
+
+    args = parser.parse_args()
+
+    result = create_mask_preview(
+        image_path=args.image,
+        config_path=args.config,
+        output_dir=args.output_dir
+    )
+
+    print("BioVisionLab mask preview created")
+    print("---------------------------------")
+    print(f"Threshold method: {result['threshold_method']}")
+    print(f"Mask area: {result['mask_area_px']} pixels")
+    print(f"Gray image: {result['gray_path']}")
+    print(f"Fungus mask: {result['mask_path']}")
+    print(f"Overlay: {result['overlay_path']}")
