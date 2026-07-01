@@ -24,6 +24,25 @@ All notable changes to BioVisionLab will be documented in this file.
 
 
 
+
+## v0.4.0 - Real-image segmentation and configuration tools
+
+### Added
+
+- Threshold method options for colony segmentation:
+  - global threshold
+  - Otsu threshold
+  - adaptive threshold
+- Mask cleanup options for noisy real images:
+  - opening
+  - closing
+  - minimum colony area filtering
+- Threshold comparison command: `biovisionlab-compare-thresholds`.
+- Mask preview command: `biovisionlab-preview-mask`.
+- Config validation command: `biovisionlab-validate-config`.
+- Documentation for threshold methods, mask cleanup, mask preview, and config validation.
+- Additional automated tests for threshold methods, mask cleanup, mask preview, threshold comparison, and config validation.
+
 ## v0.3.0 - Experiment setup and demo workflow improvements
 
 ### Added
