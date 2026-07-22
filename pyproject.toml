@@ -42,6 +42,8 @@ biovisionlab-validate-config = "plate_analysis.cli:main_validate_config"
 
 biovisionlab-analyze-seeded = "plate_analysis.cli:main_analyze_seeded"
 
+biovisionlab-plot-seeded = "plate_analysis.cli:main_plot_seeded"
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 

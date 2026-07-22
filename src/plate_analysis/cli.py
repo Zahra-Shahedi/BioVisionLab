@@ -18,6 +18,7 @@ from plate_analysis.threshold_compare import compare_threshold_methods
 from plate_analysis.mask_preview import create_mask_preview
 from plate_analysis.config_validation import validate_config
 from plate_analysis.seeded_pipeline import analyze_seeded_folder
+from plate_analysis.seeded_plots import plot_seeded_results
 
 
 def main_analyze():
@@ -599,3 +600,26 @@ def main_analyze_seeded():
     print(f"Failed: {(~df['detected']).sum()}")
     print(f"Output CSV: {args.output_csv}")
     print(f"Annotated images: {args.annotated_dir}")
+
+
+def main_plot_seeded():
+    parser = argparse.ArgumentParser(
+        description="Create plots from BioVisionLab seeded segmentation measurements."
+    )
+
+    parser.add_argument("--csv", required=True, help="Seeded measurements CSV")
+    parser.add_argument("--output-dir", required=True, help="Folder to save plots")
+    parser.add_argument("--day-column", default="day", help="Column to use as time/day")
+
+    args = parser.parse_args()
+
+    outputs = plot_seeded_results(
+        csv_path=args.csv,
+        output_dir=args.output_dir,
+        day_column=args.day_column
+    )
+
+    print("BioVisionLab seeded plots created")
+    print("--------------------------------")
+    for name, path in outputs.items():
+        print(f"{name}: {path}")
