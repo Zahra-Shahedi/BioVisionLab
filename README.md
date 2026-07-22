@@ -149,3 +149,15 @@ biovisionlab-analyze-seeded \
 ```
 
 The workflow outputs colony measurements, gap distance, directional growth toward the opponent, and annotated quality-control images.
+
+## Seeded result plots
+
+Seeded segmentation measurements can be plotted directly from the command line.
+
+```bash
+biovisionlab-plot-seeded \
+    --csv results/seeded_measurements.csv \
+    --output-dir results/seeded_plots
+```
+
+This creates gap-over-time and directional-growth plots for dual-culture experiments.

@@ -132,3 +132,20 @@ The seeded workflow measures:
 - colony area in pixels
 
 The optional calibration CSV can override seed coordinates, agar reference coordinates, search radius, seed radius, and rim-exclusion settings for each image.
+
+## 17. Plot seeded segmentation results
+
+Creates publication-style plots from seeded segmentation measurement CSV files.
+
+```bash
+biovisionlab-plot-seeded \
+    --csv results/seeded_measurements.csv \
+    --output-dir results/seeded_plots
+```
+
+This command saves:
+
+- `gap_over_time.png`
+- `directional_growth_over_time.png`
+
+The plots summarize colony interaction over time using gap distance and directional growth toward the opponent.

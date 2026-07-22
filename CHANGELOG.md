@@ -7,6 +7,8 @@ All notable changes to BioVisionLab will be documented in this file.
 
 ### Added
 
+- Seeded result plotting command: `biovisionlab-plot-seeded`.
+
 - Seeded colony segmentation workflow for difficult dual-culture plate images.
 
 - Threshold method options for colony segmentation: global, Otsu, and adaptive.
