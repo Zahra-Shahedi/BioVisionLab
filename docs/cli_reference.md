@@ -107,3 +107,28 @@ This checks:
 - mask-cleanup settings
 
 Use this before running real-image analysis.
+
+## 16. Analyze plates using seeded colony segmentation
+
+Analyzes dual-culture plate images using expected colony seed locations.
+
+This workflow is useful when simple thresholding detects the plate rim, glare, or background instead of the colony.
+
+```bash
+biovisionlab-analyze-seeded \
+    --input data/raw_images \
+    --config config/seeded_dual_culture_template.json \
+    --calibration-csv config/seeded_image_calibration_template.csv \
+    --output-csv results/seeded_measurements.csv \
+    --annotated-dir results/seeded_annotated
+```
+
+The seeded workflow measures:
+
+- left and right colony width
+- left and right colony height
+- gap between colonies
+- growth toward the opponent
+- colony area in pixels
+
+The optional calibration CSV can override seed coordinates, agar reference coordinates, search radius, seed radius, and rim-exclusion settings for each image.

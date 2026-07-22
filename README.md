@@ -130,3 +130,22 @@ See the license file here:
 The long-term goal is to expand BioVisionLab into a reusable toolkit for biological image analysis, including fungal plate assays, plant disease images, roots, seeds, and microscopy images.
 
 Future versions may include machine learning and deep learning models for more complex segmentation and prediction tasks.
+
+## Seeded colony segmentation
+
+BioVisionLab includes a seeded segmentation workflow for difficult dual-culture plate images.
+
+This method uses expected left and right inoculation points to detect colonies while reducing false detection from plate rims, glare, and background artifacts.
+
+Example:
+
+```bash
+biovisionlab-analyze-seeded \
+    --input data/raw_images \
+    --config config/seeded_dual_culture_template.json \
+    --calibration-csv config/seeded_image_calibration_template.csv \
+    --output-csv results/seeded_measurements.csv \
+    --annotated-dir results/seeded_annotated
+```
+
+The workflow outputs colony measurements, gap distance, directional growth toward the opponent, and annotated quality-control images.
