@@ -40,6 +40,8 @@ biovisionlab-preview-mask = "plate_analysis.cli:main_preview_mask"
 
 biovisionlab-validate-config = "plate_analysis.cli:main_validate_config"
 
+biovisionlab-analyze-seeded = "plate_analysis.cli:main_analyze_seeded"
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 

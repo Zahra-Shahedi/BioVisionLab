@@ -17,6 +17,7 @@ from plate_analysis.synthetic_data import generate_mock_dual_culture_dataset
 from plate_analysis.threshold_compare import compare_threshold_methods
 from plate_analysis.mask_preview import create_mask_preview
 from plate_analysis.config_validation import validate_config
+from plate_analysis.seeded_pipeline import analyze_seeded_folder
 
 
 def main_analyze():
@@ -568,3 +569,33 @@ def main_validate_config():
     if args.report is not None:
         print("")
         print(f"Report saved at: {args.report}")
+
+
+def main_analyze_seeded():
+    parser = argparse.ArgumentParser(
+        description="Analyze dual-culture plates using seeded colony segmentation."
+    )
+
+    parser.add_argument("--input", required=True, help="Input image folder")
+    parser.add_argument("--config", required=True, help="Seeded segmentation config JSON")
+    parser.add_argument("--output-csv", required=True, help="Output measurements CSV")
+    parser.add_argument("--annotated-dir", required=True, help="Output annotated image folder")
+    parser.add_argument("--calibration-csv", default=None, help="Optional per-image calibration CSV")
+
+    args = parser.parse_args()
+
+    df = analyze_seeded_folder(
+        input_dir=args.input,
+        config_path=args.config,
+        output_csv=args.output_csv,
+        annotated_dir=args.annotated_dir,
+        calibration_csv=args.calibration_csv
+    )
+
+    print("BioVisionLab seeded analysis complete")
+    print("------------------------------------")
+    print(f"Images analyzed: {len(df)}")
+    print(f"Detected: {df['detected'].sum()}")
+    print(f"Failed: {(~df['detected']).sum()}")
+    print(f"Output CSV: {args.output_csv}")
+    print(f"Annotated images: {args.annotated_dir}")
