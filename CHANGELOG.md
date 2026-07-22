@@ -27,6 +27,23 @@ All notable changes to BioVisionLab will be documented in this file.
 
 
 
+
+## v0.5.0 - Seeded colony segmentation workflow
+
+### Added
+
+- Seeded colony segmentation workflow for difficult dual-culture plate images.
+- Command: `biovisionlab-analyze-seeded`.
+- Optional per-image calibration CSV for seed coordinates, agar reference points, split position, search radius, seed radius, and rim-exclusion settings.
+- Rim-exclusion support using inner plate masks.
+- Directional growth measurements toward the opponent:
+  - `left_growth_toward_mm`
+  - `right_growth_toward_mm`
+- Annotated seeded-analysis quality-control images.
+- Template config file: `config/seeded_dual_culture_template.json`.
+- Template calibration file: `config/seeded_image_calibration_template.csv`.
+- Automated tests for seeded segmentation and seeded pipeline analysis.
+
 ## v0.4.0 - Real-image segmentation and configuration tools
 
 ### Added
