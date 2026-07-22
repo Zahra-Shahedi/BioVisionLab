@@ -28,6 +28,15 @@ All notable changes to BioVisionLab will be documented in this file.
 
 
 
+
+## v0.5.1 - Packaging and cleanup patch
+
+### Fixed
+
+- Tracked the threshold comparison module in version control.
+- Removed temporary pilot configuration files from the working tree.
+- Confirmed the repository is clean and tests pass after the seeded segmentation release.
+
 ## v0.5.0 - Seeded colony segmentation workflow
 
 ### Added
